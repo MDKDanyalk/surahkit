@@ -1,0 +1,43 @@
+{
+  "name": "@mdkva/surahkit",
+  "version": "0.1.0",
+  "description": "MDKVA SurahKit provides clean, reliable, and easily accessible Quran data ideal for apps, Islamic tools, AI systems, and automation projects.",
+    "keywords": [
+    "quran",
+    "surah",
+    "islam",
+    "arabic",
+    "english",
+    "quran-api",
+    "quran-json",
+    "surah-data",
+    "versekit",
+    "browser",
+    "web",
+    "frontend",
+    "mdkva",
+    "multilingual"
+  ],
+  "homepage": "https://mdkva.com/apis/surahkit/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mdkva/surahkit.git"
+  },
+  "license": "MIT",
+  "author": "MDKVA <contact@mdkva.com>",
+  "contributors": [
+    {
+      "name": "M. Danyal Kayani",
+      "email": "danyal@mdkva.com"
+    }
+  ],
+  "type": "module",
+  "main": "surahkit.js",
+  "files": [
+    "surahkit.js",
+    "data"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
