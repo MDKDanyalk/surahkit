@@ -1,13 +1,10 @@
-export const surahKit = {
-  /**
-   * Load the full Surah dataset for a given language.
-   * @param {string} language - Language file (e.g., "english", "arabic").
-   * @returns {Promise<Array>} - Array of Surahs
-   */
-  async load(language) {
+export const SurahKit = {
+  /* ------------------------------------------
+   * NEW FUNCTION: loadAll()
+   * ------------------------------------------ */
+  async loadAll(language) {
     if (!language) throw new Error("Language is required.");
 
-    // Local path
     const url = `https://cdn.jsdelivr.net/npm/@mdkva/surahkit/data/${language}.json`;
 
     const res = await fetch(url);
@@ -16,17 +13,13 @@ export const surahKit = {
     return res.json();
   },
 
-  /**
-   * Get a Surah by its unique ID (string).
-   * Works for IDs like "1", "3b", "2c", etc.
-   * @param {string} language
-   * @param {string} id - Surah ID
-   * @returns {Promise<Object>} - Surah object
-   */
-  async getById(language, id) {
+  /* ------------------------------------------
+   * NEW FUNCTION: searchById()
+   * ------------------------------------------ */
+  async searchById(language, id) {
     if (!id) throw new Error("Surah ID is required.");
 
-    const quran = await this.load(language);
+    const quran = await this.loadAll(language);
     const surahId = String(id).trim();
     const surah = quran.find(s => s.id === surahId);
 
@@ -34,29 +27,46 @@ export const surahKit = {
     return surah;
   },
 
-  /**
-   * Search Surah names for a keyword.
-   * @param {string} language
-   * @param {string} keyword
-   * @returns {Promise<Array>} - Array of matching Surahs
-   */
+  /* ------------------------------------------
+   * NEW FUNCTION: searchByName()
+   * ------------------------------------------ */
   async searchByName(language, keyword) {
     if (!keyword) return [];
-    const quran = await this.load(language);
+    const quran = await this.loadAll(language);
     const term = keyword.toLowerCase();
     return quran.filter(s => s.surah.toLowerCase().includes(term));
   },
 
-  /**
-   * Search inside the Surah text.
-   * @param {string} language
-   * @param {string} phrase
-   * @returns {Promise<Array>} - Array of matching Surahs
-   */
-  async search(language, phrase) {
+  /* ------------------------------------------
+   * NEW FUNCTION: searchByPhrase()
+   * ------------------------------------------ */
+  async searchByPhrase(language, phrase) {
     if (!phrase) return [];
-    const quran = await this.load(language);
+    const quran = await this.loadAll(language);
     const term = phrase.toLowerCase();
     return quran.filter(s => s.text.toLowerCase().includes(term));
+  },
+
+  /* ------------------------------------------
+   * OLD API (kept for backward compatibility)
+   * These forward calls to the new methods
+   * ------------------------------------------ */
+
+  // Old: surahKit.load(language)
+  async load(language) {
+    return this.loadAll(language);
+  },
+
+  // Old: surahKit.getById(language, id)
+  async getById(language, id) {
+    return this.searchById(language, id);
+  },
+
+  // Old: surahKit.search(language, phrase)
+  async search(language, phrase) {
+    return this.searchByPhrase(language, phrase);
   }
 };
+
+// camelCase convention... for those that don't prefer PascalCase
+export const surahKit = SurahKit;
