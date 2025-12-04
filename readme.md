@@ -5,10 +5,10 @@ It provides a clean and unified API for retrieving Surahs from any supported lan
 
 ## **✨ Features**
 
-* **`load(language)`** — Load the full Surah dataset for a language.
-* **`getById(language, id)`** — Retrieve a Surah using its unique ID (string-safe; supports `"1"`, `"3b"`, `"2c"`, etc.).
+* **`loadAll(language)`** — Load the full Surah dataset for a language.
+* **`searchById(language, id)`** — Retrieve a Surah using its unique ID (string-safe; supports `"1"`, `"3b"`, `"2c"`, etc.).
 * **`searchByName(language, keyword)`** — Find Surahs by name (e.g., “mankind”).
-* **`search(language, phrase)`** — Search Surah text for any phrase.
+* **`searchByPhrase(language, phrase)`** — Search Surah text for any phrase.
 * Works with **any language**, as long as a JSON file exists.
 * **Simple, predictable JSON structure**:
 * **Zero dependencies**, fully ES module compatible.
@@ -31,16 +31,18 @@ SurahKit is browser-first. You can load it via file path, CDN, or module bundler
 
 ## **🌐 Usage**
 
-## **surahKit.load(language)**
+## **surahKit.loadAll(language)**
 ```html
-<div id="load-result"></div>
+<div id="mdkva-surahkit"></div>
 
 <script type="module">
 
-  async function testLoad() {
+import { surahKit } from "https://cdn.jsdelivr.net/npm/@mdkva/surahkit/surahkit.js";
+
+  async function loadAll() {
     try {
       // Load the full dataset for English
-      const allSurahs = await surahKit.load("english");
+      const allSurahs = await surahKit.loadAll("english");
 
       console.log("load:", allSurahs);
 
@@ -54,50 +56,58 @@ SurahKit is browser-first. You can load it via file path, CDN, or module bundler
         </div>
       `).join('');
 
-      document.getElementById("load-result").innerHTML = html;
+      document.getElementById("mdkva-surahkit").innerHTML = html;
 
     } catch (err) {
       console.error("Error in load():", err);
-      document.getElementById("load-result").innerText = err.message;
+      document.getElementById("mdkva-surahkit").innerText = err.message;
     }
   }
 
-  testLoad();
+  loadAll();
 </script>
 ```
 
-## **surahKit.getById(language, id)**
+---
+
+## **surahKit.searchById(language, id)**
 ```html
-<div id="surah"></div>
+<div id="mdkva-surahkit"></div>
 
 <script type="module">
 
-  async function run() {
-    try {
-      const surah = await surahKit.getById("english", "36");
+import { surahKit } from "https://cdn.jsdelivr.net/npm/@mdkva/surahkit/surahkit.js";
 
-      document.getElementById("surah").innerHTML = `
+  async function searchById() {
+    try {
+      const surah = await surahKit.searchById("english", "36");
+
+      document.getElementById("mdkva-surahkit").innerHTML = `
         <h2>${surah.id}: ${surah.surah}</h2>
         <p><strong>Total Verses:</strong> ${surah.verses}</p>
         <p>${surah.text}</p>
       `;
     } catch (err) {
       console.error(err);
-      document.getElementById("surah").innerText = err.message;
+      document.getElementById("mdkva-surahkit").innerText = err.message;
     }
   }
 
-  run();
+  searchById();
 </script>
 ```
 
+---
+
 ## **surahKit.searchByName(language, keyword)**
 ```html
-<div id="search-name-result"></div>
+<div id="mdkva-surahkit"></div>
 
 <script type="module">
 
-  async function testSearchByName() {
+import { surahKit } from "https://cdn.jsdelivr.net/npm/@mdkva/surahkit/surahkit.js";
+
+  async function searchByName() {
     try {
       // Search for surahs containing "Mankind" in the name
       const results = await surahKit.searchByName("english", "mankind");
@@ -105,7 +115,7 @@ SurahKit is browser-first. You can load it via file path, CDN, or module bundler
       console.log("searchByName:", results);
 
       if (results.length === 0) {
-        document.getElementById("search-name-result").innerText = "No surahs found.";
+        document.getElementById("mdkva-surahkit").innerText = "No surahs found.";
         return;
       }
 
@@ -118,33 +128,37 @@ SurahKit is browser-first. You can load it via file path, CDN, or module bundler
         </div>
       `).join('');
 
-      document.getElementById("search-name-result").innerHTML = html;
+      document.getElementById("mdkva-surahkit").innerHTML = html;
 
     } catch (err) {
       console.error("Error in searchByName():", err);
-      document.getElementById("search-name-result").innerText = err.message;
+      document.getElementById("mdkva-surahkit").innerText = err.message;
     }
   }
 
-  testSearchByName();
+  searchByName();
 </script>
 ```
 
-## **surahKit.search(language, phrase)**
+---
+
+## **surahKit.searchByPhrase(language, phrase)**
 ```html
-<div id="search-text-result"></div>
+<div id="mdkva-surahkit"></div>
 
 <script type="module">
 
-  async function testSearchText() {
+import { surahKit } from "https://cdn.jsdelivr.net/npm/@mdkva/surahkit/surahkit.js";
+
+  async function searchByPhrase() {
     try {
       // Search for the phrase "We have granted you a clear triumph" in surah text
-      const results = await surahKit.search("english", "We have granted you a clear triumph");
+      const results = await surahKit.searchByPhrase("english", "We have granted you a clear triumph");
 
       console.log("search:", results);
 
       if (results.length === 0) {
-        document.getElementById("search-text-result").innerText = "No matches found.";
+        document.getElementById("mdkva-surahkit").innerText = "No matches found.";
         return;
       }
 
@@ -157,34 +171,32 @@ SurahKit is browser-first. You can load it via file path, CDN, or module bundler
         </div>
       `).join('');
 
-      document.getElementById("search-text-result").innerHTML = html;
+      document.getElementById("mdkva-surahkit").innerHTML = html;
 
     } catch (err) {
-      console.error("Error in search():", err);
-      document.getElementById("search-text-result").innerText = err.message;
+      console.error("Error in searchByPhrase():", err);
+      document.getElementById("mdkva-surahkit").innerText = err.message;
     }
   }
 
-  testSearchText();
+  searchByPhrase();
 </script>
 ```
 
 ---
 
-## **🛠 Contributing**
-
-Contributions are welcome!
-
-* GitHub: [https://github.com/mdkva/surahkit](https://github.com/mdkva/surahkit)
-* Submit issues, translations, improvements, or JSON corrections anytime.
+## Contributions
+This project is open source and contributions are welcome!
+* GitHub Repository: [https://github.com/mdkva/surahkit](https://github.com/mdkva/surahkit)
+* Feel free to fork, submit issues, or create pull requests.
 
 ---
 
-## **🔗 Links**
-
-* **Github:** [https://github.com/mdkva/surahkit](https://github.com/mdkva/surahkit)
-* **Company Website:** [https://mdkva.com](https://mdkva.com)
+## Links
+* **npm Package:** [https://www.npmjs.com/package/@mdkva/surahkit](https://www.npmjs.com/package/@mdkva/surahkit)
+* **Company Website:** [mdkva.com](https://mdkva.com/)
 * **Contact:** [contact@mdkva.com](mailto:contact@mdkva.com)
+* **Author:** [github.com/MDKDanyalk](https://github.com/MDKDanyalk)
 
 ---
 
