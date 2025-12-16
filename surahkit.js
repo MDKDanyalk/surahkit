@@ -86,19 +86,25 @@ export const SurahKit = {
   },
 
   /**
-   * Searches for multiple Surah items by their IDs.
-   *
-   * @param {string} language - The language to search within.
-   * @param {Array<(string|number)>} ids - An array of Surah IDs to find.
-   * @returns {Promise<SurahItem[]>}
-   */
+       * Searches for multiple Surah items by their IDs.
+       * * ENHANCEMENT: Normalizes input to ensure 'ids' is always an array.
+       *
+       * @param {string} language - The language to search within.
+       * @param {Array<(string|number)> | (string|number)} ids - An array of Surah IDs to find, or a single ID.
+       * @returns {Promise<SurahItem[]>}
+       */
   async searchByIds(language, ids) {
-    if (!ids || ids.length === 0) return [];
+    // --- Input Normalization ---
+    // Ensure ids is an array, handling cases where a single ID is passed by mistake
+    const idArray = Array.isArray(ids) ? ids : [ids];
+
+    if (!idArray || idArray.length === 0) return [];
+    // ---------------------------
 
     const quran = await this.loadAll(language);
 
     // Convert IDs to a Set for O(1) average lookup time
-    const idSet = new Set(ids.map(id => String(id).trim()));
+    const idSet = new Set(idArray.map(id => String(id).trim()));
 
     // Filter the list for items whose IDs are in the set
     return quran.filter(s => idSet.has(s.id));
